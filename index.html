@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Harsh Mishra — Flutter Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0E1B36;
+    --surface:#152945;
+    --surface-2:#1B3153;
+
+    --ink:#EDF1FF;
+    --ink-soft:#9FB0D9;
+    --ink-faint:#6E7FA8;
+
+    --gold:#D9B65C;
+    --gold-soft: rgba(217,182,92,0.16);
+    --sky:#5B9DFF;
+    --sky-soft: rgba(91,157,255,0.16);
+    --emerald:#34C495;
+    --emerald-soft: rgba(52,196,149,0.16);
+    --silver:#A9B8D9;
+    --silver-soft: rgba(169,184,217,0.14);
+    --rose:#E08D6D;
+    --rose-soft: rgba(224,141,109,0.16);
+
+    --sh-d: rgba(2,5,14,0.65);
+    --sh-l: rgba(72,104,158,0.4);
+
+    --shadow-raised: 9px 9px 20px var(--sh-d), -9px -9px 18px var(--sh-l);
+    --shadow-raised-sm: 5px 5px 12px var(--sh-d), -5px -5px 10px var(--sh-l);
+    --shadow-pressed: inset 5px 5px 10px var(--sh-d), inset -5px -5px 10px var(--sh-l);
+    --shadow-pressed-sm: inset 3px 3px 7px var(--sh-d), inset -3px -3px 7px var(--sh-l);
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{animation:none !important; transition:none !important;}
+  }
+
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Manrope', sans-serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    position:relative;
+    overflow-x:hidden;
+  }
+
+  .blob{ position:absolute; border-radius:50%; filter:blur(70px); opacity:0.35; z-index:0; pointer-events:none; }
+  .blob-1{width:440px; height:440px; background:#2A4A8A; top:-160px; right:-140px;}
+  .blob-2{width:340px; height:340px; background:#4A3B7A; top:300px; left:-170px;}
+  .blob-3{width:300px; height:300px; background:#3A6250; bottom:-100px; right:12%; opacity:0.25;}
+
+  h1,h2,h3{ font-family:'Space Grotesk', sans-serif; margin:0; color:var(--ink); letter-spacing:-0.01em; }
+  a{color:inherit;}
+  .mono{font-family:'IBM Plex Mono', monospace;}
+
+  .wrap{ max-width:1100px; margin:0 auto; padding:0 32px; position:relative; z-index:1; }
+  :focus-visible{outline:3px solid var(--gold); outline-offset:3px; border-radius:8px;}
+
+  /* ---------- NAV ---------- */
+  .nav-shell{ position:sticky; top:18px; z-index:50; padding:0 24px; }
+  nav{
+    max-width:1052px; margin:0 auto;
+    background:var(--surface);
+    border-radius:999px;
+    box-shadow:var(--shadow-raised-sm);
+    padding:12px 14px 12px 26px;
+    display:flex; align-items:center; justify-content:space-between;
+    border:1px solid rgba(217,182,92,0.12);
+  }
+  .nav-mark{ font-family:'Space Grotesk', sans-serif; font-weight:700; font-size:1.02rem; }
+  .nav-mark span{color:var(--gold);}
+  .nav-links{ display:flex; gap:6px; font-size:0.88rem; font-weight:600; }
+  .nav-links a{
+    text-decoration:none; color:var(--ink-soft);
+    padding:9px 15px; border-radius:999px;
+    transition:background 0.2s, color 0.2s, box-shadow .2s;
+  }
+  .nav-links a:hover{ color:var(--ink); box-shadow:var(--shadow-pressed-sm); }
+  @media (max-width:760px){ .nav-links{display:none;} }
+  .nav-cta{
+    font-size:0.85rem; font-weight:700; color:#12203D;
+    background:linear-gradient(150deg, #EBCE85, var(--gold));
+    padding:10px 20px; border-radius:999px; text-decoration:none;
+    box-shadow:5px 5px 12px rgba(217,182,92,0.3), -3px -3px 8px rgba(255,255,255,0.06);
+  }
+
+  /* ---------- HERO ---------- */
+  header.hero{ padding:64px 0 60px; position:relative; z-index:1;}
+  .hero-grid{ display:grid; grid-template-columns:1.05fr 0.95fr; gap:52px; align-items:center; }
+  @media (max-width:880px){ .hero-grid{grid-template-columns:1fr; gap:44px;} }
+
+  .eyebrow-pill{
+    display:inline-flex; align-items:center; gap:9px;
+    background:var(--emerald-soft); color:#4FE0B0;
+    font-family:'IBM Plex Mono', monospace; font-size:0.8rem;
+    padding:8px 16px 8px 12px; border-radius:999px;
+    box-shadow:var(--shadow-pressed-sm); margin-bottom:22px;
+  }
+  .eyebrow-pill .dot{width:8px; height:8px; border-radius:50%; background:var(--emerald);}
+
+  .hero h1{ font-size:3.1rem; font-weight:700; line-height:1.08; }
+  @media (max-width:520px){ .hero h1{font-size:2.2rem;} }
+  .hero .role{ margin-top:16px; font-size:1.15rem; color:var(--ink-soft); max-width:44ch; }
+  .hero .lede{ margin-top:18px; font-size:1rem; color:var(--ink-soft); max-width:50ch; }
+
+  .hero-actions{ display:flex; gap:16px; margin-top:32px; flex-wrap:wrap; }
+  .btn{
+    font-family:'Manrope', sans-serif; font-weight:700; font-size:0.95rem;
+    padding:15px 28px; border-radius:999px; text-decoration:none;
+    display:inline-block; border:none; cursor:pointer;
+    transition:transform 0.15s, box-shadow 0.15s;
+  }
+  .btn-primary{
+    background:linear-gradient(150deg, #EBCE85, var(--gold));
+    color:#12203D;
+    box-shadow:7px 7px 16px rgba(217,182,92,0.32), -5px -5px 12px rgba(255,255,255,0.06);
+  }
+  .btn-primary:hover{ transform:translateY(2px); box-shadow:3px 3px 8px rgba(217,182,92,0.32), -2px -2px 6px rgba(255,255,255,0.06); }
+  .btn-ghost{ background:var(--surface); color:var(--ink); box-shadow:var(--shadow-raised-sm); }
+  .btn-ghost:hover{ box-shadow:var(--shadow-pressed-sm); }
+
+  /* phone clay frame */
+  .phone{
+    background:linear-gradient(160deg, #1E3560, #142544);
+    border-radius:46px; padding:20px;
+    box-shadow:var(--shadow-raised);
+    max-width:380px; margin:0 auto;
+    border:1px solid rgba(217,182,92,0.14);
+  }
+  .phone-notch{ width:70px; height:8px; background:rgba(217,182,92,0.35); border-radius:999px; margin:0 auto 14px; }
+  .phone-screen{
+    background:#0A1730; border-radius:30px;
+    box-shadow:var(--shadow-pressed);
+    padding:22px 20px 26px;
+    font-family:'IBM Plex Mono', monospace; font-size:0.78rem; line-height:1.9;
+    color:#BFD0F5; overflow-x:auto;
+  }
+  .phone-screen .ln{color:#3E507C; display:inline-block; width:18px; user-select:none;}
+  .kw{color:var(--gold);} .cls{color:var(--sky);} .str{color:var(--emerald);} .fn{color:#8FE0EA;} .cm{color:#4E5F8C;}
+  .cursor{ display:inline-block; width:6px; height:1em; background:var(--gold); vertical-align:text-bottom; animation:blink 1.05s step-start infinite; }
+  @keyframes blink{50%{opacity:0;}}
+
+  /* stat strip */
+  .stats-row{ display:grid; grid-template-columns:repeat(4,1fr); gap:18px; margin-top:56px; }
+  @media (max-width:700px){ .stats-row{grid-template-columns:repeat(2,1fr);} }
+  .stat{ background:var(--surface); border-radius:22px; padding:22px 20px; box-shadow:var(--shadow-raised-sm); text-align:center; }
+  .stat b{ font-family:'Space Grotesk', sans-serif; font-size:1.6rem; display:block; }
+  .stat span{ color:var(--ink-soft); font-size:0.83rem; }
+  .stat.v b{color:var(--gold);} .stat.p b{color:var(--rose);}
+  .stat.m b{color:var(--emerald);} .stat.s b{color:var(--sky);}
+
+  /* ---------- SECTIONS ---------- */
+  section{ padding:70px 0; position:relative; z-index:1;}
+  .sec-head{ display:flex; align-items:baseline; gap:14px; margin-bottom:34px; }
+  .sec-head h2{ font-size:1.85rem; }
+  .sec-badge{
+    font-family:'IBM Plex Mono', monospace; font-size:0.78rem;
+    background:var(--gold-soft); color:var(--gold);
+    padding:6px 13px; border-radius:999px;
+  }
+
+  .clay-panel{ background:var(--surface); border-radius:28px; box-shadow:var(--shadow-raised); padding:36px; }
+  .about-text{ max-width:74ch; font-size:1.03rem; color:var(--ink-soft); }
+  .about-text strong{ color:var(--ink); }
+  .about-text + .about-text{ margin-top:16px; }
+
+  /* ---------- SKILLS ---------- */
+  .skill-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+  @media (max-width:860px){ .skill-grid{grid-template-columns:repeat(2,1fr);} }
+  @media (max-width:560px){ .skill-grid{grid-template-columns:1fr;} }
+  .skill-card{ background:var(--surface); border-radius:24px; padding:24px; box-shadow:var(--shadow-raised-sm); }
+  .skill-icon{
+    width:46px; height:46px; border-radius:16px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:1.2rem; margin-bottom:14px; box-shadow:var(--shadow-raised-sm);
+  }
+  .skill-card h3{ font-size:1.02rem; margin-bottom:12px; }
+  .skill-tags{ display:flex; flex-wrap:wrap; gap:8px; }
+  .tag{
+    font-family:'IBM Plex Mono', monospace; font-size:0.74rem;
+    padding:7px 12px; border-radius:999px;
+    background:var(--bg); color:var(--ink-soft);
+    box-shadow:var(--shadow-pressed-sm);
+  }
+
+  /* ---------- EXPERIENCE ---------- */
+  .tl-item{
+    background:var(--surface); border-radius:26px; box-shadow:var(--shadow-raised-sm);
+    padding:30px 32px; display:grid; grid-template-columns:150px 1fr; gap:24px;
+  }
+  .tl-item + .tl-item{ margin-top:20px; }
+  @media (max-width:640px){ .tl-item{grid-template-columns:1fr;} }
+  .tl-date{
+    font-family:'IBM Plex Mono', monospace; font-size:0.78rem; color:var(--gold);
+    background:var(--gold-soft); padding:8px 12px; border-radius:14px; height:fit-content;
+  }
+  .tl-role{ font-size:1.15rem; font-weight:700; font-family:'Space Grotesk', sans-serif; }
+  .tl-org{ color:var(--ink-soft); font-size:0.94rem; margin-top:3px; }
+  .tl-list{ margin:16px 0 0; padding-left:18px; color:var(--ink-soft); font-size:0.95rem; }
+  .tl-list li{ margin-bottom:7px; }
+
+  /* ---------- PROJECTS ---------- */
+  .proj-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:22px; }
+  @media (max-width:760px){ .proj-grid{grid-template-columns:1fr;} }
+  .proj-card{
+    background:var(--surface); border-radius:26px; padding:28px;
+    box-shadow:var(--shadow-raised-sm);
+    transition:transform 0.18s, box-shadow 0.18s;
+  }
+  .proj-card:hover{ transform:translateY(-4px); box-shadow:var(--shadow-raised); }
+  .proj-top{ display:flex; align-items:center; gap:14px; margin-bottom:16px; }
+  .proj-mark{
+    width:48px; height:48px; border-radius:16px;
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Space Grotesk', sans-serif; font-weight:700; font-size:1.02rem;
+    color:#0E1B36; flex-shrink:0;
+    box-shadow:5px 5px 10px rgba(0,0,0,0.35), -3px -3px 8px rgba(255,255,255,0.08);
+  }
+  .proj-title-wrap h3{ font-size:1.08rem; }
+  .proj-tag{ font-family:'IBM Plex Mono', monospace; font-size:0.72rem; color:var(--ink-faint); margin-top:2px;}
+  .proj-card p{ color:var(--ink-soft); font-size:0.93rem; margin:0 0 18px; }
+  .proj-stack{ display:flex; flex-wrap:wrap; gap:8px; }
+  .chip{
+    font-family:'IBM Plex Mono', monospace; font-size:0.72rem;
+    background:var(--bg); color:var(--ink-soft);
+    padding:6px 12px; border-radius:999px; box-shadow:var(--shadow-pressed-sm);
+  }
+  .chip.status{ background:var(--emerald-soft); color:#4FE0B0; box-shadow:none; }
+
+  /* ---------- EDUCATION / SOFT SKILLS ---------- */
+  .split-two{ display:grid; grid-template-columns:1fr 1fr; gap:24px; align-items:start; }
+  @media (max-width:760px){ .split-two{grid-template-columns:1fr;} }
+  .edu-card{ background:var(--surface); border-radius:24px; padding:26px; box-shadow:var(--shadow-raised-sm); }
+  .edu-item + .edu-item{ margin-top:20px; padding-top:20px; border-top:1px dashed rgba(159,176,217,0.2); }
+  .edu-degree{ font-weight:700; font-size:1rem; }
+  .edu-school{ color:var(--ink-soft); font-size:0.9rem; margin-top:3px; }
+  .edu-year{
+    display:inline-block; margin-top:10px;
+    font-family:'IBM Plex Mono', monospace; font-size:0.76rem; color:var(--rose);
+    background:var(--rose-soft); padding:5px 11px; border-radius:999px;
+  }
+  .soft-list{ display:flex; flex-wrap:wrap; gap:10px; }
+  .soft-pill{
+    background:var(--bg); border-radius:999px; padding:10px 18px;
+    font-size:0.87rem; color:var(--ink-soft); box-shadow:var(--shadow-pressed-sm);
+  }
+
+  /* ---------- CONTACT / FOOTER ---------- */
+  footer{
+    background:linear-gradient(160deg, #0B1730, #060D1E);
+    padding:66px 0 36px; margin-top:20px;
+    border-radius:48px 48px 0 0; position:relative; z-index:1;
+    border-top:1px solid rgba(217,182,92,0.15);
+  }
+  footer h2{ color:#fff; font-size:2rem; max-width:16ch; }
+  footer .lede{ color:#8FA0C9; margin-top:14px; max-width:44ch; font-size:0.98rem;}
+  .foot-grid{ display:grid; grid-template-columns:1.2fr 1fr; gap:40px; align-items:start; }
+  @media (max-width:700px){ .foot-grid{grid-template-columns:1fr;} }
+  .foot-links{ display:flex; flex-direction:column; gap:14px; }
+  .foot-link{
+    text-decoration:none; color:#EDF1FF; font-size:0.95rem; font-weight:600;
+    background:rgba(217,182,92,0.06);
+    padding:16px 20px; border-radius:18px;
+    box-shadow:6px 6px 14px rgba(0,0,0,0.4), -4px -4px 10px rgba(255,255,255,0.03);
+    transition:transform 0.15s;
+  }
+  .foot-link:hover{ transform:translateX(4px); color:var(--gold); }
+  .foot-bottom{
+    margin-top:50px; padding-top:22px; border-top:1px solid rgba(217,182,92,0.12);
+    display:flex; justify-content:space-between; color:#5B6C93; font-size:0.82rem;
+    flex-wrap:wrap; gap:10px;
+  }
+</style>
+</head>
+<body>
+
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+<div class="blob blob-3"></div>
+
+<div class="nav-shell">
+  <nav>
+    <div class="nav-mark">Harsh<span>.</span>Mishra</div>
+    <div class="nav-links">
+      <a href="#about">About</a>
+      <a href="#skills">Skills</a>
+      <a href="#experience">Experience</a>
+      <a href="#projects">Projects</a>
+      <a href="#education">Education</a>
+    </div>
+    <a class="nav-cta" href="#contact">Hire me</a>
+  </nav>
+</div>
+
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow-pill"><span class="dot"></span>Available for new Flutter projects</div>
+      <h1>Harsh Mishra</h1>
+      <p class="role">Flutter Developer building cross‑platform apps that ship — from first widget to Play Store release.</p>
+      <p class="lede">1+ year turning fintech, ed‑tech, fitness and e‑commerce ideas into fast, clean, production‑ready mobile apps. Comfortable owning a feature end to end, and comfortable in a team that moves quickly.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#projects">See the work</a>
+        <a class="btn btn-ghost" href="#contact">Get in touch</a>
+      </div>
+    </div>
+
+    <div class="phone">
+      <div class="phone-notch"></div>
+      <div class="phone-screen">
+<div><span class="ln">1</span><span class="cm">// Mira Bhayandar, Mumbai</span></div>
+<div><span class="ln">2</span><span class="kw">class</span> <span class="cls">HarshMishra</span> <span class="kw">extends</span> <span class="cls">FlutterDeveloper</span> {</div>
+<div><span class="ln">3</span>&nbsp;&nbsp;<span class="kw">final</span> experience = <span class="str">'1+ year'</span>;</div>
+<div><span class="ln">4</span>&nbsp;&nbsp;<span class="kw">final</span> shipped = [<span class="str">'Fitnesta'</span>, <span class="str">'Sarvadnya'</span>];</div>
+<div><span class="ln">5</span>&nbsp;&nbsp;<span class="kw">final</span> stack = [<span class="str">'BLoC'</span>, <span class="str">'Firebase'</span>];</div>
+<div><span class="ln">6</span></div>
+<div><span class="ln">7</span>&nbsp;&nbsp;<span class="fn">@override</span></div>
+<div><span class="ln">8</span>&nbsp;&nbsp;<span class="cls">Widget</span> <span class="fn">build</span>() =></div>
+<div><span class="ln">9</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="cls">ProductionApp</span>(<span class="str">'clean, scalable'</span>)<span class="cursor"></span>;</div>
+<div><span class="ln">10</span>}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap stats-row">
+    <div class="stat v"><b>1+ yr</b><span>Flutter experience</span></div>
+    <div class="stat p"><b>6+</b><span>apps built end‑to‑end</span></div>
+    <div class="stat m"><b>2</b><span>live on Play Store</span></div>
+    <div class="stat s"><b>4</b><span>domains covered</span></div>
+  </div>
+</header>
+
+<section id="about">
+  <div class="wrap">
+    <div class="sec-head"><h2>About</h2><span class="sec-badge">01</span></div>
+    <div class="clay-panel">
+      <p class="about-text">
+        I'm a Flutter developer working out of Mira Bhayandar, Mumbai, currently building at <strong>Rivora Tech Solutions</strong>. Over the past year I've moved from junior contributor to someone who owns a screen — sometimes a whole app — from architecture through to its Play Store listing. I've worked across <strong>fintech and trading, ed‑tech, fitness, and quick‑commerce</strong>, which means I'm used to switching context: a payment gating flow one sprint, a live‑class scheduler the next.
+      </p>
+      <p class="about-text">
+        My default toolkit is <strong>BLoC/Cubit</strong> for state, a clean architecture split for anything that will outlive one sprint, and the full <strong>Firebase</strong> stack for auth, data and monitoring. I like the parts of mobile development that don't show up in a demo — crash‑free sessions, a release checklist, a codebase the next developer can actually read.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="wrap">
+    <div class="sec-head"><h2>Skills</h2><span class="sec-badge">02</span></div>
+    <div class="skill-grid">
+
+      <div class="skill-card">
+        <div class="skill-icon" style="background:var(--gold-soft); color:var(--gold);">📱</div>
+        <h3>Mobile</h3>
+        <div class="skill-tags">
+          <span class="tag">Flutter</span><span class="tag">Dart</span><span class="tag">Android</span><span class="tag">iOS</span>
+        </div>
+      </div>
+
+      <div class="skill-card">
+        <div class="skill-icon" style="background:var(--rose-soft); color:var(--rose);">🧩</div>
+        <h3>State management</h3>
+        <div class="skill-tags">
+          <span class="tag">BLoC</span><span class="tag">Cubit</span><span class="tag">GetX</span><span class="tag">Provider</span>
+        </div>
+      </div>
+
+      <div class="skill-card">
+        <div class="skill-icon" style="background:var(--sky-soft); color:var(--sky);">🔌</div>
+        <h3>Backend &amp; APIs</h3>
+        <div class="skill-tags">
+          <span class="tag">REST APIs</span><span class="tag">Firebase</span><span class="tag">Firestore</span><span class="tag">Socket.IO</span><span class="tag">RazorPay</span><span class="tag">LiveKit</span><span class="tag">Agora</span>
+        </div>
+      </div>
+
+      <div class="skill-card">
+        <div class="skill-icon" style="background:var(--emerald-soft); color:var(--emerald);">📊</div>
+        <h3>Monitoring</h3>
+        <div class="skill-tags">
+          <span class="tag">Firebase Analytics</span><span class="tag">Crashlytics</span><span class="tag">Google Maps</span>
+        </div>
+      </div>
+
+      <div class="skill-card">
+        <div class="skill-icon" style="background:var(--silver-soft); color:var(--silver);">🛠️</div>
+        <h3>Tooling &amp; process</h3>
+        <div class="skill-tags">
+          <span class="tag">Git/GitHub</span><span class="tag">Postman</span><span class="tag">Clean Architecture</span><span class="tag">Flutter DevTools</span>
+        </div>
+      </div>
+
+      <div class="skill-card">
+        <div class="skill-icon" style="background:var(--gold-soft); color:var(--gold);">🚀</div>
+        <h3>Delivery</h3>
+        <div class="skill-tags">
+          <span class="tag">Agile/Scrum</span><span class="tag">Play Store release</span><span class="tag">Code review</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="experience">
+  <div class="wrap">
+    <div class="sec-head"><h2>Experience</h2><span class="sec-badge">03</span></div>
+
+    <div class="tl-item">
+      <div class="tl-date">Feb 2026 —<br>July 2026</div>
+      <div>
+        <div class="tl-role">Flutter Developer</div>
+        <div class="tl-org">Rivora Tech Solutions</div>
+        <ul class="tl-list">
+          <li>Developed and shipped <strong>Fitnesta</strong> (summer vacation activity platform) and <strong>Sarvadnya</strong> (live online classes app) — both live on the Google Play Store.</li>
+          <li>Built a quick‑commerce e‑commerce application, owning the complete UI architecture and screen development.</li>
+          <li>Implemented scalable Flutter codebases with clean architecture, state management, and REST API integration across all three apps.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-date">June 2024 —<br>Dec 2024</div>
+      <div>
+        <div class="tl-role">Junior Flutter Developer</div>
+        <div class="tl-org">WDIPL — Mobile App Development Company</div>
+        <ul class="tl-list">
+          <li>Worked on production‑grade Flutter applications with a focus on performance, scalability, and clean architecture.</li>
+          <li>Integrated Firebase services, REST APIs, and Socket.IO for real‑time features and seamless data sync.</li>
+          <li>Contributed to fintech, trading, and e‑commerce apps using BLoC architecture for structured state management.</li>
+          <li>Monitored app performance and resolved crashes via Firebase Analytics and Crashlytics.</li>
+          <li>Participated in agile cycles, sprint planning, and code reviews across feature releases.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="wrap">
+    <div class="sec-head"><h2>Projects</h2><span class="sec-badge">04</span></div>
+    <div class="proj-grid">
+
+      <div class="proj-card">
+        <div class="proj-top">
+          <div class="proj-mark" style="background:linear-gradient(150deg,#EBCE85,var(--gold));">Fi</div>
+          <div class="proj-title-wrap"><h3>Fitnesta</h3><div class="proj-tag">Summer vacation activity platform</div></div>
+        </div>
+        <p>Connects students with trainers and teachers for vacation programs. Multi‑role flows for student, trainer and teacher, Razorpay payments, and dashboard management — owned from architecture through to Play Store release.</p>
+        <div class="proj-stack">
+          <span class="chip status">Live on Play Store</span>
+          <span class="chip">Flutter</span><span class="chip">Firebase</span><span class="chip">Razorpay</span>
+        </div>
+      </div>
+
+      <div class="proj-card">
+        <div class="proj-top">
+          <div class="proj-mark" style="background:linear-gradient(150deg,#F0AA8D,var(--rose));">Sa</div>
+          <div class="proj-title-wrap"><h3>Sarvadnya</h3><div class="proj-tag">Live online classes application</div></div>
+        </div>
+        <p>An ed‑tech platform for real‑time online classes, handling class scheduling, live session flows, and user authentication end to end.</p>
+        <div class="proj-stack">
+          <span class="chip status">Live on Play Store</span>
+          <span class="chip">Flutter</span><span class="chip">Firebase</span><span class="chip">REST APIs</span>
+        </div>
+      </div>
+
+      <div class="proj-card">
+        <div class="proj-top">
+          <div class="proj-mark" style="background:linear-gradient(150deg,#5FDCB0,var(--emerald));">Op</div>
+          <div class="proj-title-wrap"><h3>Optifii</h3><div class="proj-tag">Enterprise employee benefits platform</div></div>
+        </div>
+        <p>KYC onboarding, role‑based access control, and approval workflow management. Corporate perks distribution covering benefit credits, corporate cards, and entitlement tracking.</p>
+        <div class="proj-stack">
+          <span class="chip">Flutter</span><span class="chip">REST APIs</span><span class="chip">Firebase</span>
+        </div>
+      </div>
+
+      <div class="proj-card">
+        <div class="proj-top">
+          <div class="proj-mark" style="background:linear-gradient(150deg,#C7D3EE,var(--silver));">Tc</div>
+          <div class="proj-title-wrap"><h3>Trader Circuit</h3><div class="proj-tag">Trading signals &amp; insights platform</div></div>
+        </div>
+        <p>Real‑time trading insights with Socket.IO powering live market data and push notifications, plus premium subscription gating for advanced analytics.</p>
+        <div class="proj-stack">
+          <span class="chip status">Live</span>
+          <span class="chip">Flutter</span><span class="chip">Socket.IO</span><span class="chip">Firebase</span>
+        </div>
+      </div>
+
+      <div class="proj-card" style="grid-column:1 / -1;">
+        <div class="proj-top">
+          <div class="proj-mark" style="background:linear-gradient(150deg,#7DB4FF,var(--sky));">Bd</div>
+          <div class="proj-title-wrap"><h3>Blood Donation Mobile Application</h3><div class="proj-tag">Personal project</div></div>
+        </div>
+        <p>Location‑based donor discovery with blood‑group filtering and real‑time availability via Firebase. Separate dashboards for donors, blood requests, and ambulance services, with direct call and message features built in.</p>
+        <div class="proj-stack">
+          <span class="chip">Flutter</span><span class="chip">Firebase</span><span class="chip">Google Maps API</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="education">
+  <div class="wrap split-two">
+    <div>
+      <div class="sec-head"><h2>Education</h2><span class="sec-badge">05</span></div>
+      <div class="edu-card">
+        <div class="edu-item">
+          <div class="edu-degree">Master of Computer Applications</div>
+          <div class="edu-school">ASM Institute of Management &amp; Computer Studies, Thane — Mumbai University</div>
+          <div class="edu-year">2022 – 2024</div>
+        </div>
+        <div class="edu-item">
+          <div class="edu-degree">B.Sc. Information Technology</div>
+          <div class="edu-school">Shree L. R. Tiwari Degree College, Mira Road — Mumbai University</div>
+          <div class="edu-year">2019 – 2022</div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="sec-head"><h2>Soft skills</h2><span class="sec-badge">06</span></div>
+      <div class="edu-card">
+        <div class="soft-list">
+          <span class="soft-pill">Communication</span>
+          <span class="soft-pill">Proactiveness</span>
+          <span class="soft-pill">Collaboration</span>
+          <span class="soft-pill">Problem solving</span>
+          <span class="soft-pill">Self‑learner</span>
+          <span class="soft-pill">Attention to detail</span>
+          <span class="soft-pill">Ownership</span>
+          <span class="soft-pill">Decision making</span>
+          <span class="soft-pill">Work ethics</span>
+          <span class="soft-pill">Leadership</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer id="contact">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <h2>Have an app to build? Let's talk.</h2>
+        <p class="lede">Based in Mira Bhayandar, Mumbai — open to Flutter roles and freelance builds.</p>
+      </div>
+      <div class="foot-links">
+        <a class="foot-link" href="mailto:harshmishra9013@gmail.com">harshmishra9013@gmail.com</a>
+        <a class="foot-link" href="tel:+918928325500">+91 89283 25500</a>
+        <a class="foot-link" href="https://linkedin.com/in/harsh-mishra-2b9812220">linkedin.com/in/harsh-mishra-2b9812220</a>
+        <a class="foot-link" href="https://github.com/harshmishragithub">github.com/harshmishragithub</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>Harsh Mishra — Flutter Developer</span>
+      <span>Mira Bhayandar, Mumbai</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
